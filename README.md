@@ -76,6 +76,7 @@ pip install selenium pytest pytest-order
 ```bash
 # Suite completa
 pytest test_urban_routes.py -v
+- **Resultado actual (18/07/2026):** 9 passed
 
 # Una prueba específica
 pytest test_urban_routes.py::TestUrbanRoutes::test_add_credit_card -v

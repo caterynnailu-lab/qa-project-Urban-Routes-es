@@ -23,13 +23,8 @@ class TestUrbanRoutes:
             cls.driver.quit()
 
     def setup_method(self, method):
-        # Excepción documentada: test_wait_for_driver_info depende de una sesión
-        # continua del navegador. La app parece usar una conexión en segundo plano
-        # para simular la asignación del conductor, que no se reestablece a tiempo
-        # tras un reload completo de página. Por eso, para ESTE test específico,
-        # no recargamos y en su lugar reconstruimos el flujo sobre la sesión existente.
-        if method.__name__ != 'test_wait_for_driver_info':
-            self.driver.get(data.urban_routes_url)
+        _ = method
+        self.driver.get(data.urban_routes_url)
         self.routes_page = UrbanRoutesPage(self.driver)
 
     # --- Métodos de precondición (privados, NO son tests) ---
@@ -55,6 +50,7 @@ class TestUrbanRoutes:
 
     def _do_submit_order(self):
         self._do_add_credit_card()
+        self.routes_page.set_message(data.message_for_driver)
         time.sleep(2)  # margen antes de enviar el pedido
         self.routes_page.click_submit_order_button()
 
@@ -103,8 +99,6 @@ class TestUrbanRoutes:
         assert self.routes_page.is_search_modal_visible() == True
 
     def test_wait_for_driver_info(self):
-        self.driver.get(data.urban_routes_url)
-        time.sleep(2)
         self._do_submit_order()
         self.routes_page.wait_for_driver_info()
         arrival_text = self.routes_page.get_driver_arrival_text()

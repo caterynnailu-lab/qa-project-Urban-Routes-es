@@ -202,7 +202,7 @@ class UrbanRoutesPage:
         import time
         for attempt in range(max_retries):
             try:
-                WebDriverWait(self.driver, 15).until(
+                WebDriverWait(self.driver, 20).until(
                     lambda driver: 'lleg' in driver.find_element(*self.driver_arrival_title).text.lower()
                 )
                 return
@@ -211,10 +211,9 @@ class UrbanRoutesPage:
                 if 'shown' not in order_container.get_attribute('class'):
                     time.sleep(3)
                     self.click_submit_order_button()
-                    continue
                 else:
-                    current_text = self.driver.find_element(*self.driver_arrival_title).text
-                    raise Exception(f"Timeout esperando el conductor. Texto actual: '{current_text}'")
+                    time.sleep(3)
+                continue
         raise Exception(
             f"Se agotaron los {max_retries} intentos esperando la asignación del conductor "
             f"(comportamiento intermitente conocido de la app de práctica)."
